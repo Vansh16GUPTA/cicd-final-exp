@@ -1,0 +1,50 @@
+name: C Calculator CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y gcc
+    
+    - name: Compile calculator
+      run: gcc calculator.c -o calculator
+    
+    - name: Test addition
+      run: |
+        echo -e "5\n3\n1\nn" > input.txt
+        ./calculator < input.txt > output.txt
+        grep "Sum of a and b : 8.00" output.txt || (echo "Addition test failed" && exit 1)
+    
+    - name: Test subtraction
+      run: |
+        echo -e "5\n3\n2\nn" > input.txt
+        ./calculator < input.txt > output.txt
+        grep "Difference of a and b : 2.00" output.txt || (echo "Subtraction test failed" && exit 1)
+    
+    - name: Test multiplication
+      run: |
+        echo -e "5\n3\n3\nn" > input.txt
+        ./calculator < input.txt > output.txt
+        grep "Product of a and b : 15.00" output.txt || (echo "Multiplication test failed" && exit 1)
+    
+    - name: Test division
+      run: |
+        echo -e "6\n3\n4\nn" > input.txt
+        ./calculator < input.txt > output.txt
+        grep "Quotient of a and b : 2.00" output.txt || (echo "Division test failed" && exit 1)
+    
+    - name: Test invalid operation
+      run: |
+        echo -e "5\n3\n5\nn" > input.txt
+        ./calculator < input.txt > output.txt
+        grep "You chose a wrong operator!" output.txt || (echo "Invalid operation test failed" && exit 1)
