@@ -16,7 +16,7 @@ float Quot(float a, float b){
 
 int main(){ 
     float a,b;
-    printf("Enter two numbers a and b :  ");
+    printf("Enter two numbers  of a and b :  ");
     scanf("%f %f", &a, &b);
     
     int operation;
